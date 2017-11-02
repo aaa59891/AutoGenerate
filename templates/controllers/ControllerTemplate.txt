@@ -1,0 +1,96 @@
+package controllers
+
+import (
+	"github.com/gin-gonic/gin"
+	"bitbucket.org/mositech/mosi_demo_go/models"
+	"bitbucket.org/mositech/mosi_demo_go/db"
+	"net/http"
+)
+
+func MODEL_NAMEListView(c *gin.Context){
+	models := []models.MODEL_NAME{}
+
+	if err := db.DB.Find(&models).Error; err != nil{
+		GoToErrorPage(http.StatusInternalServerError, c, err)
+		return
+	}
+
+	c.HTML(http.StatusOK, "MODEL_NAMEList.html", gin.H{
+		"data": models,
+	})
+}
+
+/**
+	Models' id needs to add tag `form:"id"`
+ */
+func MODEL_NAMEView(c *gin.Context){
+	model := models.MODEL_NAME{}
+
+	if err := c.BindQuery(&model); err != nil{
+		GoToErrorPage(http.StatusBadRequest, c, err)
+		return
+	}
+
+	if !db.DB.NewRecord(model){
+        if err := db.DB.Find(&model).Error; err != nil{
+            GoToErrorPage(http.StatusInternalServerError, c, err)
+            return
+        }
+	}
+
+	c.HTML(http.StatusOK, "MODEL_NAMEEdit.html", gin.H{
+		"data": model,
+	})
+}
+
+func CreateMODEL_NAME(c *gin.Context){
+	model := models.MODEL_NAME{}
+
+	if err := c.BindJSON(&model); err != nil{
+		GoToErrorPage(http.StatusBadRequest, c, err)
+		return
+	}
+
+	if err := db.DB.Create(&model).Error; err != nil{
+		GoToErrorPage(http.StatusInternalServerError, c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": model,
+	})
+}
+
+
+/**
+	Recommend rewriting this function
+ */
+
+//func UpdateMODEL_NAME(c *gin.Context){
+//	model := models.MODEL_NAME{}
+//
+//	if err := c.BindJSON(&model); err != nil{
+//		GoToErrorPage(http.StatusBadRequest, c, err)
+//		return
+//	}
+//
+//	if err := db.DB.Save(&model).Error; err != nil{
+//		GoToErrorPage(http.StatusInternalServerError, c, err)
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, gin.H{
+//		"data": model,
+//	})
+//}
+
+func DeleteMODEL_NAME(c *gin.Context){
+	id := c.Query("id")
+
+	if err := db.DB.Delete(&models.MODEL_NAME{}, "id = ?", id).Error; err != nil{
+		GoToErrorPage(http.StatusInternalServerError, c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}

@@ -1,0 +1,31 @@
+{{template "header" .}}
+<script src="/static/js/-MODEL_NAME-.js"></script>
+<div class="dataDiv">
+    <table id="dataTable" class="table" align="center">
+        <thead>
+        <tr>
+            -TABLE_HEADER-
+            <th></th>
+        </tr>
+        </thead>
+        {{if .data}}
+        {{range .data}}
+        <tr>
+            -TABLE_DATA-
+            <td>
+                <a class="btn btn-primary" href="/-MODEL_NAME-?id={{.Id}}">Edit</a>
+                <button class="btn btn-danger" onclick="remove(this, '/-MODEL_NAME-', 'id', '{{.Id}}')">Delete</button>
+            </td>
+        </tr>
+        {{end}}
+        {{else}}
+        <tr id="emptyTr">
+            <td class="text-center emptyTd"><h2>NO DATA!</h2></td>
+        </tr>
+        {{end}}
+    </table>
+    <div style="text-align: center;">
+        <a class="btn btn-primary" href="/-MODEL_NAME-">Add</a>
+    </div>
+</div>
+{{template "footer"}}

@@ -1,0 +1,15 @@
+{{template "header" .}}
+<script src="/static/js/-MODEL_NAME-Edit.js"></script>
+<div class="dataDiv">
+    <div id="dataTable">
+        <form id="form" method="POST" action="/-MODEL_NAME-">
+            -FORM_DATA-
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Save">
+                <input type="button" class="btn btn-primary" value="Back" onclick="redirect('/-MODEL_NAME-List')">
+            </div>
+        </form>
+    </div>
+</div>
+{{template "footer"}}
